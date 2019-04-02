@@ -76,3 +76,7 @@
 
 *.bak
 
+#Added by Krzysztof Bolek
+*.s
+*.uvproj
+
