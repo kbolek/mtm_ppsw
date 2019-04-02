@@ -1,0 +1,11 @@
+Æwiczenie
+Podaæ instrukcje, która ustawi w rejestrze INT bity 3, 5, 6, 7, 28, 29 i 31. U¿yæ zapisu heksadecymalnego.
+(PodpowiedŸ: zapisaæ liczbê w kodzie binarnym grupuj¹c bity po cztery, nastêpnie ka¿da czwórkê/tetradê zamieniaæ
+na cyfrê w kodzie heksadecymalnym).
+
+W zapisie 32 bitowym w systemie binarnym podzielonym po cztery bity:
+
+0101 1000 0000 0000 0000 0000 1110 1000
+
+Teraz w zapisie heksadecymalnym (korzystaj¹c z zapisanych wczeœniej czwórek):
+0x580000C8
