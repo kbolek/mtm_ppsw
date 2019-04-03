@@ -80,6 +80,7 @@ void ReplaceCharactersInString(char pcString[], char cOldChar,char cNewChar) {
 }
 
 
+
 unsigned char ucFindTokensInString (char *pcString){
 	unsigned char ucCharacterCounter;
 	unsigned char ucCurrentCharacter;
@@ -90,33 +91,26 @@ unsigned char ucFindTokensInString (char *pcString){
 		switch(eStan){
 			case TOKEN:
 			{
-				if(ucTokenNr==MAX_TOKEN_NR){
+				if(ucCurrentCharacter == ' '){
+					eStan = DELIMITER;
+				}
+				else if((ucCurrentCharacter==NULL)|(ucTokenNr == MAX_TOKEN_NR)){
 					return ucTokenNr;
-				}
-				else if(ucCurrentCharacter==NULL){
-					return ucTokenNr;
-				}
-				else if(ucCurrentCharacter!=' '){
-					eStan=TOKEN;
-				}
-				else{
-					eStan=DELIMITER;
 				}
 				break;
 			}
 			case DELIMITER:
 			{
-				if(ucCurrentCharacter==NULL){
-					return ucTokenNr;
-				}
-				else if(ucCurrentCharacter==' '){
-					eStan=DELIMITER;
-				}
-				else{
-					eStan=TOKEN;
+				if(ucCurrentCharacter != ' '){
+					eStan = TOKEN;
 					asToken[ucTokenNr].uValue.pcString = pcString + ucCharacterCounter;
 					ucTokenNr = ucTokenNr + 1;
+
 				}
+				else if((ucCurrentCharacter==NULL)|(ucTokenNr == MAX_TOKEN_NR)){
+					return ucTokenNr;
+				}
+
 				break;
 			}
 		}
@@ -125,19 +119,17 @@ unsigned char ucFindTokensInString (char *pcString){
 
 
 enum Result eStringToKeyword(char pcStr[],enum KeywordCode *peKeywordCode){
-	unsigned char ucTokenCounter;
-	for(ucTokenCounter=0;ucTokenCounter<MAX_TOKEN_NR;ucTokenCounter++)
+	unsigned char ucKeywordCounter;
+	for(ucKeywordCounter=0;ucKeywordCounter<MAX_TOKEN_NR;ucKeywordCounter++)
 	{
-		if (eCompareString(pcStr,asKeywordList[ucTokenCounter].cString) == EQUAL) 
+		if (eCompareString(pcStr,asKeywordList[ucKeywordCounter].cString) == EQUAL) 
 		{
-			*peKeywordCode = asKeywordList[ucTokenCounter].eCode;
+			*peKeywordCode = asKeywordList[ucKeywordCounter].eCode;
 			return OK;
 		}
 	}
 	return ERROR;
 };
-
-
 
 void DecodeTokens() {
 	unsigned char ucTokenCounter;
@@ -148,14 +140,16 @@ void DecodeTokens() {
 	for(ucTokenCounter= 0; ucTokenCounter< ucTokenNr; ucTokenCounter++){
 		psCurrentToken= &asToken[ucTokenCounter];
 
-		if(OK == eHexStringToUInt(psCurrentToken->uValue.pcString, &uiTokenValue)){
-			psCurrentToken->eType = NUMBER;
-			psCurrentToken->uValue.uiNumber = uiTokenValue;
-		}
-		else if(OK == eStringToKeyword(psCurrentToken->uValue.pcString, &eTokenCode)){
+		if(OK == eStringToKeyword(psCurrentToken->uValue.pcString, &eTokenCode)){
 			psCurrentToken->eType=KEYWORD;
 			psCurrentToken->uValue.eKeyword=eTokenCode;
 		}
+		
+		else if(OK == eHexStringToUInt(psCurrentToken->uValue.pcString, &uiTokenValue)){
+			psCurrentToken->eType = NUMBER;
+			psCurrentToken->uValue.uiNumber = uiTokenValue;
+		}
+		
 		else{
 			psCurrentToken->eType=STRING;
 		}
@@ -168,6 +162,7 @@ void DecodeMsg(char *pcString){
 	ReplaceCharactersInString(pcString, ' ', NULL);
 	DecodeTokens();
 }
+
 
 
 
