@@ -21,7 +21,7 @@ int main(){
 		switch(eLedState){
 			case LED_LEFT:
 				uiStepCounter = uiStepCounter +1;
-				LedStepRight();	
+				LedStepLeft();	
 				if(uiStepCounter % 3 == 0){
 					eLedState = LED_RIGHT;
 				}
@@ -29,7 +29,7 @@ int main(){
 			
 			case LED_RIGHT:
 				uiStepCounter = uiStepCounter +1;
-				LedStepLeft();
+				LedStepRight();
 				if(uiStepCounter % 3 == 0){
 					eLedState = LED_LEFT;
 				}			
