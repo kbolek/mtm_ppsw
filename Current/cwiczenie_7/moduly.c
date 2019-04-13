@@ -7,10 +7,10 @@
 
 int main(){
 	LedInit();
-	InitTimer();
+	InitTimer0Match0(1*M_MULTIPIER);
 	while(1){
 		LedStepLeft();
-		WaitOnTimer0(1*M_MULTIPIER);
+		WaitOnTimer0Match0();
 	}
 	
 	

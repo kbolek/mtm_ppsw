@@ -27,7 +27,7 @@ void InitTimer0Match0(unsigned int uiDelayTime){
 	T0TCR = T0TCR|COUNTER_ENABLE;
 }
 
-void WaitOnTimer0Match0(
+void WaitOnTimer0Match0(){
 	while((T0IR & INTERRUPT_FLAG) == 0){
 	}
 	T0IR = INTERRUPT_FLAG;
