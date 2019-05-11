@@ -4,6 +4,7 @@
 #define MULTIPIER 10000
 #define DETECTOR_bm (1<<10)
 
+
 enum State {ACTIVE,INACTIVE};
 
 enum ServoState {CALLIB,IDLE,IN_PROGRESS};
@@ -36,7 +37,13 @@ void ServoGoTo(unsigned int uiPosition){
 	eServo.uiDesiredPostion = uiPosition;
 }
 
-
+void TestServo(void){
+	while(eServo.eState != IDLE){};
+	ServoGoTo(14);
+	while(eServo.eState != IN_PROGRESS){};
+	while(eServo.eState != IDLE) {};
+	ServoGoTo(24);		
+}
 
 void Automat(){
 	switch(eServo.eState){

@@ -6,8 +6,8 @@
 
 int main (){
 	KeyboardInit();
-	ServoInit(500);
-	ServoGoTo(100);
+	ServoInit(50);
+	
 	
 	while(1){
 		switch(eKeyboardRead()){
@@ -15,13 +15,13 @@ int main (){
 				ServoCallib();
 				break;			
 			case BUTTON_2:
-				ServoGoTo(50);
+				ServoGoTo(14);
 				break;
 			case BUTTON_3:
-				ServoGoTo(100);
+				ServoGoTo(24);
 				break;
 			case BUTTON_4:
-				ServoGoTo(150);
+				ServoGoTo(36);
 			break;
 			case RELEASED:
 				break;
