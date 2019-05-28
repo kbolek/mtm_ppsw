@@ -1,6 +1,6 @@
 #define RECIEVER_SIZE 15
 #define TERMINATOR 0x0D
-#define TRANSMITER_SIZE 32
+#define TRANSMITER_SIZE 55
 
 enum eRecieverStatus { EMPTY, READY, OVERFLOW};
 void UART_InitWithInt(unsigned int uiBaudRate);

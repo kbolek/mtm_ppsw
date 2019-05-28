@@ -1,9 +1,9 @@
-enum KeywordCode {STEP, GOTO, CALLIB };
+enum KeywordCode {STEP, GOTO, CALLIB, CALC};
 enum TokenType { KEYWORD, NUMBER, STRING};
 
 #define MAX_TOKEN_NR 2 
 #define MAX_KEYWORD_STRING_LTH 10 
-#define MAX_KEYWORD_NR 3
+#define MAX_KEYWORD_NR 4
 
 union TokenValue 
 {
