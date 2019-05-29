@@ -6,7 +6,6 @@ struct Keyword asKeywordList[MAX_KEYWORD_NR]=
 	{
 		{CALLIB, "callib"},
 		{GOTO, "goto"},
-		{STEP, "step"},
 		{CALC, "calc"}
 	};
 struct Token asToken[MAX_TOKEN_NR];

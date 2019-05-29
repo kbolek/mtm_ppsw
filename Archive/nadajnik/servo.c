@@ -30,13 +30,13 @@ enum State eReadDetector(){
 }
 void ServoCallib(void){
 	eServo.eState = CALLIB;
-	//while(eServo.eState != IDLE) {};
+	while(eServo.eState != IDLE) {};
 }
 
 void ServoGoTo(unsigned int uiPosition){
 	eServo.eState = IN_PROGRESS;
 	eServo.uiDesiredPostion = uiPosition;
-	//while(eServo.eState != IDLE) {};
+	while(eServo.eState != IDLE) {};
 }
 
 void Automat(){
