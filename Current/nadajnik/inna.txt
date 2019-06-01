@@ -1,0 +1,113 @@
+#include "keyboard.h"
+#include "timer_interrupts.h"
+#include "serwo.h"
+#include "uart.h"
+#include "string.h"
+#include "command_decoder.h"
+
+void Delay(unsigned int uiWaitMs){
+	
+	unsigned int uiCounter;
+	unsigned int uiCounter2;
+	
+	for(uiCounter=0; uiCounter<uiWaitMs; uiCounter++){
+	  for(uiCounter2=0; uiCounter2<1497; uiCounter2++){}
+	}	
+}
+
+struct Watch {
+
+	unsigned char ucMinutes, ucSecconds;
+	unsigned char fSeccondsValueChanged, fMinutesValueChanged;
+};
+
+struct Watch sWatch;
+
+void WatchUpdate(){
+	
+	sWatch.ucSecconds++;
+	sWatch.fSeccondsValueChanged=1;
+	if(sWatch.ucSecconds ==3) {
+		sWatch.ucSecconds=0;
+		sWatch.ucMinutes++;
+		sWatch.fMinutesValueChanged=1;
+	}
+	if(sWatch.ucMinutes == 60){
+		sWatch.ucMinutes=0;
+	}
+}
+
+
+int main (){
+	
+	char cTab[TRANSMITER_SIZE];
+	char cOdebranyString[RECIEVER_SIZE];
+	unsigned char fDecodeCalcToken;
+	unsigned char fUnkownCommand;
+	unsigned char fDecodeIDToken;
+
+	UART_InitWithInt(9600);
+	Timer0Interrupts_Init(1000000,&WatchUpdate);
+
+	while(1){
+		
+		if((eReciever_GetStatus() == READY)){
+			Reciever_GetStringCopy( cOdebranyString );
+			DecodeMsg( cOdebranyString );
+		
+			if (ucTokenNr > 0){
+				if (asToken[0].uValue.eKeyword == CALC){
+					fDecodeCalcToken=1;
+				}
+				if (asToken[0].uValue.eKeyword == ID){
+					fDecodeIDToken=1;
+				}
+			}else{
+				fUnkownCommand=1;
+			}
+		}
+		
+		if((Transmiter_GetStatus() == FREE)){
+			
+			if(sWatch.fSeccondsValueChanged==1){
+				sWatch.fSeccondsValueChanged=0;
+				CopyString("sec ",cTab);
+				AppendUIntToString(sWatch.ucSecconds,cTab);
+				AppendString("\n",cTab);
+				Transmiter_SendString(cTab);
+				
+			}else if(sWatch.fMinutesValueChanged==1){
+				sWatch.fMinutesValueChanged=0;
+				CopyString("min ",cTab);
+				AppendUIntToString(sWatch.ucMinutes,cTab);
+				AppendString("\n",cTab);
+				Transmiter_SendString(cTab);
+				
+			}else	if (fDecodeCalcToken==1){
+					fDecodeCalcToken=0;
+					CopyString("CALC ",cTab);
+					AppendUIntToString((asToken[1].uValue.uiNumber)*2, cTab);
+					AppendString("\n",cTab);
+					Transmiter_SendString(cTab);
+
+			}else	if (fDecodeIDToken==1){ 
+					fDecodeIDToken=0;
+					CopyString("ID ",cTab);
+					AppendUIntToString(0x1234, cTab);
+					AppendString("\n",cTab);
+					Transmiter_SendString(cTab);
+			
+			
+			}else	if (fUnkownCommand==1){
+					fUnkownCommand=0;
+					CopyString("Unkown Command\n",cTab);
+					Transmiter_SendString(cTab);
+			}			
+			
+		}
+	}
+}
+
+	
+//id
+//unkown comand
